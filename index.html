@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Celestial Fortune - Your Cosmic Destiny</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated starfield background */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 1.5s ease-out;
+        }
+
+        .main-title {
+            font-size: 3.5rem;
+            background: linear-gradient(45deg, #ffd700, #ffb347, #ff6b6b);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #b8860b;
+            opacity: 0.9;
+            letter-spacing: 2px;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            animation: fadeInUp 1.5s ease-out;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 35px;
+            opacity: 0;
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.2s; }
+        .form-group:nth-child(2) { animation-delay: 0.4s; }
+        .form-group:nth-child(3) { animation-delay: 0.6s; }
+        .form-group:nth-child(4) { animation-delay: 0.8s; }
+        .form-group:nth-child(5) { animation-delay: 1s; }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #ffd700;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 15px;
+            color: #fff;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .predict-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #ffd700, #ff6b6b);
+            border: none;
+            border-radius: 15px;
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        }
+
+        .predict-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.5);
+            background: linear-gradient(135deg, #ffed4e, #ff8a8a);
+        }
+
+        .results {
+            display: none;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            animation: fadeInScale 1s ease-out;
+        }
+
+        .zodiac-sign {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .zodiac-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .zodiac-name {
+            font-size: 2.5rem;
+            color: #ffd700;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .prediction-section {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            border-left: 4px solid #ffd700;
+        }
+
+        .prediction-title {
+            font-size: 1.4rem;
+            color: #ffb347;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .prediction-text {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #ffd700;
+            color: #ffd700;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .back-btn:hover {
+            background: #ffd700;
+            color: #1a1a2e;
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 215, 0, 0.3);
+            border-top: 3px solid #ffd700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .main-title { font-size: 2.5rem; }
+            .form-container { padding: 30px 20px; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1 class="main-title">✨ Celestial Fortune ✨</h1>
+            <p class="subtitle">Discover Your Cosmic Destiny</p>
+        </div>
+
+        <div class="form-container" id="form-container">
+            <form id="horoscope-form">
+                <div class="form-group">
+                    <label for="name">Your Sacred Name</label>
+                    <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" id="dob" name="dob" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="birth-place">Place of Birth</label>
+                    <input type="text" id="birth-place" name="birth-place" placeholder="City, Country" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="birth-time">Time of Birth</label>
+                    <input type="time" id="birth-time" name="birth-time" required>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="predict-btn">✨ Reveal My Destiny ✨</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Consulting the stars... ✨</p>
+        </div>
+
+        <div class="results" id="results">
+            <div class="zodiac-sign">
+                <span class="zodiac-icon" id="zodiac-icon"></span>
+                <h2 class="zodiac-name" id="zodiac-name"></h2>
+                <p id="birth-details"></p>
+            </div>
+
+            <div class="prediction-section">
+                <h3 class="prediction-title">🌟 Personality Traits</h3>
+                <p class="prediction-text" id="personality"></p>
+            </div>
+
+            <div class="prediction-section">
+                <h3 class="prediction-title">💰 Career & Finance</h3>
+                <p class="prediction-text" id="career"></p>
+            </div>
+
+            <div class="prediction-section">
+                <h3 class="prediction-title">❤️ Love & Relationships</h3>
+                <p class="prediction-text" id="love"></p>
+            </div>
+
+            <div class="prediction-section">
+                <h3 class="prediction-title">🍀 Lucky Elements</h3>
+                <p class="prediction-text" id="lucky"></p>
+            </div>
+
+            <div class="prediction-section">
+                <h3 class="prediction-title">🔮 Future Predictions</h3>
+                <p class="prediction-text" id="future"></p>
+            </div>
+
+            <button class="back-btn" onclick="goBack()">✨ New Reading ✨</button>
+        </div>
+    </div>
+
+    <script>
+        // Create animated stars
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = star.style.height = Math.random() * 3 + 1 + 'px';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Zodiac data
+        const zodiacSigns = {
+            'Aries': { icon: '♈', dates: [3, 21, 4, 19] },
+            'Taurus': { icon: '♉', dates: [4, 20, 5, 20] },
+            'Gemini': { icon: '♊', dates: [5, 21, 6, 20] },
+            'Cancer': { icon: '♋', dates: [6, 21, 7, 22] },
+            'Leo': { icon: '♌', dates: [7, 23, 8, 22] },
+            'Virgo': { icon: '♍', dates: [8, 23, 9, 22] },
+            'Libra': { icon: '♎', dates: [9, 23, 10, 22] },
+            'Scorpio': { icon: '♏', dates: [10, 23, 11, 21] },
+            'Sagittarius': { icon: '♐', dates: [11, 22, 12, 21] },
+            'Capricorn': { icon: '♑', dates: [12, 22, 1, 19] },
+            'Aquarius': { icon: '♒', dates: [1, 20, 2, 18] },
+            'Pisces': { icon: '♓', dates: [2, 19, 3, 20] }
+        };
+
+        const horoscopePredictions = {
+            'Aries': {
+                personality: "You are a natural-born leader with an adventurous spirit and boundless energy. Your courage and determination inspire others, though your impulsive nature sometimes leads you into unexpected situations. You thrive on challenges and have an innate ability to motivate those around you.",
+                career: "Your career path is destined for leadership roles. Expect significant opportunities in the coming months, particularly in entrepreneurial ventures or management positions. Your innovative ideas will be well-received, and financial growth is on the horizon through bold investments.",
+                love: "Passion defines your romantic journey. A significant relationship transformation awaits you this year. For those single, a fiery connection with someone who matches your energy is imminent. Existing relationships will deepen through shared adventures.",
+                lucky: "Lucky numbers: 1, 8, 15. Lucky colors: Red, Orange. Lucky day: Tuesday. Lucky gemstone: Ruby. Best months for major decisions: March, July, November.",
+                future: "The stars align for a period of remarkable personal growth. A major life change around mid-year will open doors you never imagined. Trust your instincts - they will guide you toward unprecedented success and fulfillment."
+            },
+            'Taurus': {
+                personality: "You possess an earthy wisdom and unwavering determination that serves as your greatest strength. Your practical nature and love for beauty create a harmonious balance in your life. Loyalty and dependability are your hallmarks, making you a cherished friend and partner.",
+                career: "Stability and steady growth characterize your professional journey. Your methodical approach will lead to substantial gains in real estate, finance, or creative fields. A lucrative opportunity involving luxury goods or beauty industry awaits your attention.",
+                love: "Your romantic life is entering a phase of deep commitment and sensual fulfillment. Venus blesses you with lasting love that grows stronger over time. Existing partnerships will find new depths of intimacy and understanding.",
+                lucky: "Lucky numbers: 2, 6, 24. Lucky colors: Green, Pink. Lucky day: Friday. Lucky gemstone: Emerald. Best months for love: May, September, December.",
+                future: "Material abundance flows toward you through patient persistence. A significant financial opportunity in the next 18 months will secure your long-term stability. Your artistic talents will also find profitable expression."
+            },
+            'Gemini': {
+                personality: "Your brilliant mind and natural curiosity make you a fascinating conversationalist and quick thinker. Adaptability is your superpower, allowing you to thrive in diverse situations. Your wit and charm open doors wherever you go.",
+                career: "Communication-based careers bring you the greatest success. Writing, teaching, media, or technology sectors hold golden opportunities. Your ability to connect ideas will lead to breakthrough innovations and networking triumphs.",
+                love: "Intellectual connection forms the foundation of your romantic happiness. A meeting of minds with someone equally curious and communicative will blossom into deep love. Variety and mental stimulation keep your relationships vibrant.",
+                lucky: "Lucky numbers: 3, 12, 21. Lucky colors: Yellow, Silver. Lucky day: Wednesday. Lucky gemstone: Citrine. Best months for communication: June, August, October.",
+                future: "Your diverse interests culminate in unexpected success. A project combining your multiple talents will bring recognition and reward. Travel and education feature prominently in your path to fulfillment."
+            },
+            'Cancer': {
+                personality: "Your intuitive nature and deep emotional intelligence make you a natural healer and nurturer. You possess an remarkable ability to understand others' feelings and provide comfort. Your protective instincts and loyalty create lasting bonds.",
+                career: "Careers in healthcare, hospitality, real estate, or family-oriented businesses align with your cosmic purpose. Your empathetic leadership style will earn you respect and advancement. A home-based business venture shows great promise.",
+                love: "Family and home are central to your romantic happiness. A relationship that offers security and emotional depth will flourish. Your nurturing nature attracts partners seeking genuine care and understanding.",
+                lucky: "Lucky numbers: 4, 7, 16. Lucky colors: White, Silver, Blue. Lucky day: Monday. Lucky gemstone: Moonstone. Best months for family matters: April, July, October.",
+                future: "Your intuitive investments, particularly in property or family businesses, will yield substantial returns. A period of emotional healing leads to profound personal transformation and renewed happiness."
+            },
+            'Leo': {
+                personality: "You radiate confidence and natural charisma that draws others into your orbit. Your generous heart and dramatic flair make you unforgettable. Leadership comes naturally to you, and your enthusiasm is contagious to all around you.",
+                career: "Entertainment, fashion, luxury goods, or any field requiring charisma will bring you recognition. Your creative projects gain significant attention and financial reward. A position of authority beckons with substantial benefits.",
+                love: "Romance in your life is destined to be grand and passionate. You attract partners who appreciate your magnificence and match your intensity. A relationship that feels like a fairy tale is within your reach.",
+                lucky: "Lucky numbers: 1, 5, 19. Lucky colors: Gold, Orange, Purple. Lucky day: Sunday. Lucky gemstone: Peridot. Best months for creativity: May, August, November.",
+                future: "The spotlight finds you in ways that exceed your wildest dreams. A creative endeavor or public role brings fame and fortune. Your generous nature returns to you multiplied in unexpected blessings."
+            },
+            'Virgo': {
+                personality: "Your analytical mind and attention to detail are unmatched gifts that bring order to chaos. You possess a service-oriented heart that finds fulfillment in helping others improve their lives. Perfection is your natural standard.",
+                career: "Healthcare, research, quality control, or organizational consulting align perfectly with your skills. Your methodical approach to problem-solving brings recognition and advancement. A health or wellness venture shows exceptional promise.",
+                love: "You seek meaningful connections based on mutual respect and shared values. A partner who appreciates your thoughtfulness and dedication will create a deeply satisfying relationship with you.",
+                lucky: "Lucky numbers: 6, 14, 23. Lucky colors: Navy Blue, Brown, White. Lucky day: Wednesday. Lucky gemstone: Sapphire. Best months for health: June, September, December.",
+                future: "Your careful planning and attention to detail result in significant achievements. A project requiring precision and expertise establishes your reputation as an expert in your field."
+            },
+            'Libra': {
+                personality: "Your innate sense of balance and justice, combined with your diplomatic nature, makes you a natural peacemaker. Beauty and harmony are essential to your well-being, and your charm effortlessly wins hearts.",
+                career: "Law, diplomacy, arts, fashion, or relationship counseling bring you both success and satisfaction. Your ability to see all sides of situations makes you invaluable in negotiations and partnerships.",
+                love: "Partnership is your natural state, and you attract relationships that bring balance to your life. A harmonious union based on equality and mutual appreciation is your romantic destiny.",
+                lucky: "Lucky numbers: 7, 15, 22. Lucky colors: Pink, Light Blue, Lavender. Lucky day: Friday. Lucky gemstone: Opal. Best months for partnerships: September, November, February.",
+                future: "Collaborative ventures bring unexpected prosperity. Your ability to bring people together results in successful partnerships that benefit everyone involved. Beauty and art play important roles in your wealth creation."
+            },
+            'Scorpio': {
+                personality: "Your mysterious depth and transformative power make you one of the most magnetic personalities. You possess an uncanny ability to see beneath surfaces and understand hidden truths. Your loyalty is absolute and your intuition is razor-sharp.",
+                career: "Psychology, investigation, research, finance, or transformative healing work align with your intense nature. Your ability to handle crises and navigate complex situations brings recognition and substantial rewards.",
+                love: "Your romantic relationships are profound transformational experiences. You seek soul-deep connections that transcend the ordinary. A passionate bond that changes both partners fundamentally is approaching.",
+                lucky: "Lucky numbers: 8, 13, 27. Lucky colors: Deep Red, Black, Maroon. Lucky day: Tuesday. Lucky gemstone: Garnet. Best months for transformation: October, January, May.",
+                future: "A major personal transformation leads to unprecedented power and influence. Hidden resources or investments suddenly become extremely valuable. Your ability to rise from challenges stronger than before amazes everyone."
+            },
+            'Sagittarius': {
+                personality: "Your adventurous spirit and philosophical nature make you a natural explorer of both the world and ideas. Your optimism is infectious, and your honesty, though sometimes blunt, is always appreciated for its authenticity.",
+                career: "Education, travel, publishing, international business, or spiritual guidance align with your expansive nature. Your global perspective and cultural understanding open doors to international opportunities.",
+                love: "Freedom and adventure are essential elements in your romantic relationships. A partner who shares your love of exploration and growth will create an exciting and fulfilling partnership with you.",
+                lucky: "Lucky numbers: 9, 18, 25. Lucky colors: Purple, Turquoise, Orange. Lucky day: Thursday. Lucky gemstone: Turquoise. Best months for travel: March, September, December.",
+                future: "International connections and long-distance ventures bring remarkable opportunities. Your philosophical insights gain recognition and potentially become a source of income through teaching or writing."
+            },
+            'Capricorn': {
+                personality: "Your ambitious nature and practical wisdom create a foundation for lasting success. You possess an innate understanding of structure and hierarchy, making you a natural leader. Patience and persistence are your greatest virtues.",
+                career: "Business, government, finance, or traditional industries offer you the greatest opportunities for advancement. Your long-term strategic thinking results in significant achievements and recognition from authority figures.",
+                love: "You seek relationships built on mutual respect, shared goals, and long-term compatibility. A partnership that supports your ambitions while providing emotional security will bring you deep satisfaction.",
+                lucky: "Lucky numbers: 10, 17, 26. Lucky colors: Black, Dark Green, Brown. Lucky day: Saturday. Lucky gemstone: Garnet. Best months for career: January, April, October.",
+                future: "Your patient investments and careful planning result in substantial material success. A position of significant authority and responsibility comes with corresponding financial rewards and social status."
+            },
+            'Aquarius': {
+                personality: "Your innovative thinking and humanitarian spirit make you a visionary ahead of your time. You possess a unique ability to see possibilities that others miss, and your independence is both inspiring and necessary for your growth.",
+                career: "Technology, social causes, innovation, or unconventional fields bring you the greatest fulfillment. Your original ideas and progressive thinking lead to breakthrough discoveries or revolutionary changes in your field.",
+                love: "Friendship forms the foundation of your romantic relationships. You need a partner who respects your individuality and shares your idealistic vision for the future. Unconventional relationships may bring unexpected happiness.",
+                lucky: "Lucky numbers: 11, 20, 29. Lucky colors: Electric Blue, Silver, Neon Green. Lucky day: Saturday. Lucky gemstone: Amethyst. Best months for innovation: February, June, November.",
+                future: "Your humanitarian efforts or technological innovations gain widespread recognition and support. A network of like-minded individuals helps amplify your impact on the world in remarkable ways."
+            },
+            'Pisces': {
+                personality: "Your compassionate heart and intuitive wisdom make you a natural healer and creative soul. You possess an extraordinary ability to understand emotions and connect with the spiritual realm. Your imagination knows no bounds.",
+                career: "Arts, healing, spirituality, psychology, or charitable work align with your sensitive nature. Your creative talents and emotional intelligence bring recognition and the opportunity to make a meaningful difference in others' lives.",
+                love: "You seek transcendent love that touches your soul and inspires your highest self. A spiritually connected partnership that allows for emotional depth and creative expression will fulfill your romantic dreams.",
+                lucky: "Lucky numbers: 12, 18, 30. Lucky colors: Sea Green, Lavender, Silver. Lucky day: Thursday. Lucky gemstone: Aquamarine. Best months for creativity: March, July, November.",
+                future: "Your artistic or healing gifts become a significant source of both income and personal fulfillment. A spiritual awakening leads to profound insights that transform not only your life but also the lives of those you touch."
+            }
+        };
+
+        function getZodiacSign(date) {
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            
+            for (const [sign, data] of Object.entries(zodiacSigns)) {
+                const [startMonth, startDay, endMonth, endDay] = data.dates;
+                
+                if ((month === startMonth && day >= startDay) || 
+                    (month === endMonth && day <= endDay) ||
+                    (startMonth > endMonth && (month === startMonth && day >= startDay) || (month === endMonth && day <= endDay))) {
+                    return sign;
+                }
+            }
+            return 'Capricorn'; // Default fallback
+        }
+
+        function generatePrediction(name, birthDate, birthPlace, birthTime, sign) {
+            const predictions = horoscopePredictions[sign];
+            
+            document.getElementById('zodiac-icon').textContent = zodiacSigns[sign].icon;
+            document.getElementById('zodiac-name').textContent = sign;
+            document.getElementById('birth-details').innerHTML = `
+                Born: ${birthDate.toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                })} at ${birthTime}<br>
+                Place: ${birthPlace}
+            `;
+            
+            // Personalize predictions with user's name
+            document.getElementById('personality').textContent = predictions.personality;
+            document.getElementById('career').textContent = predictions.career;
+            document.getElementById('love').textContent = predictions.love;
+            document.getElementById('lucky').textContent = predictions.lucky;
+            document.getElementById('future').textContent = predictions.future;
+        }
+
+        function goBack() {
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('form-container').style.display = 'block';
+            document.getElementById('horoscope-form').reset();
+        }
+
+        document.getElementById('horoscope-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const dobString = document.getElementById('dob').value;
+            const birthPlace = document.getElementById('birth-place').value;
+            const birthTime = document.getElementById('birth-time').value;
+            
+            const birthDate = new Date(dobString);
+            const zodiacSign = getZodiacSign(birthDate);
+            
+            // Show loading
+            document.getElementById('form-container').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+            
+            // Simulate loading time for effect
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+                generatePrediction(name, birthDate, birthPlace, birthTime, zodiacSign);
+                document.getElementById('results').style.display = 'block';
+            }, 3000);
+        });
+
+        // Initialize stars on page load
+        window.addEventListener('load', createStars);
+    </script>
+</body>
+</html>
